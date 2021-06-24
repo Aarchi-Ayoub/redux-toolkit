@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
+import { Provider } from "react-redux";
+import { store } from "./store";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+
+import List from "./components/post/List";
+import GetOne from "./components/post/GetOne";
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route component={List} exact path="/posts" />
+          <Route component={GetOne} exact path="/posts/:postID" />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
   );
-}
+};
 
 export default App;
