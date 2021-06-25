@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetPosts, DeletePost } from "../../services/PostsServices";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const List = () => {
   // To use our actions
@@ -19,6 +19,9 @@ const List = () => {
   return (
     <Fragment>
       <div className="container">
+        <Link to="/post/add">
+          <button className="btn btn-success mt-3">New</button>
+        </Link>
         <ul className="list-group mt-3">
           {posts &&
             posts.map((post, index) => (

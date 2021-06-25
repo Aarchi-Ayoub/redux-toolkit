@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { GetPosts, GetPost, DeletePost, UpdatePost } from '../services/PostsServices';
+import { GetPosts, GetPost, DeletePost, UpdatePost, AddPost } from '../services/PostsServices';
 // Initial State
 const initialState = {
     posts: [],
@@ -15,27 +15,39 @@ export const postsSlice = createSlice({
     // Use the async methods
     extraReducers: {
         // Good case
-        [GetPosts.fulfilled]: (state, action) => {
-            state.posts = action.payload
+        [GetPosts.fulfilled]: (state, { payload }) => {
+            state.posts = payload
         },
         // Bad case
         [GetPosts.rejected]: (state, { payload }) => {
             state.posts = []
         },
         // Good case
-        [GetPost.fulfilled]: (state, action) => {
-            state.post = action.payload
+        [GetPost.fulfilled]: (state, { payload }) => {
+            state.post = payload
         },
         // Bad case
         [GetPost.rejected]: (state, { payload }) => {
             state.post = {}
         },
-        [DeletePost.fulfilled]: (state, action) => {
-            state.posts = state.posts.filter(post => post.id !== action.payload.id)
+        // Bad case
+        [DeletePost.fulfilled]: (state, { payload }) => {
+            state.posts = state.posts.filter(post => post.id !== payload)
         },
-        [UpdatePost.fulfilled]: (state, action) => {
-            state.posts = state.posts.filter(post => post.id === action.payload.id ? state.post = action.payload : post)
-        }
+        // Good case
+        [UpdatePost.fulfilled]: (state, { payload }) => {
+            console.log(payload.state)
+                // state.post = payload.state
+            state.posts.filter(post => post.id === payload.id ? post = payload.state : post)
+        },
+        // Bad case
+        [UpdatePost.rejected]: (state, { payload }) => {
+            state.post = {}
+        },
+        // Good case
+        [AddPost.fulfilled]: (state, { payload }) => {
+            state.posts = [payload, ...state.posts]
+        },
     }
 });
 // Export the reducer

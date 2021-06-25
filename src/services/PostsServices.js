@@ -22,7 +22,8 @@ export const GetPost = createAsyncThunk(
 export const DeletePost = createAsyncThunk(
     "posts/deletePost",
     async(postID) => {
-        return await (await axios.get(`https://jsonplaceholder.typicode.com/posts/${postID}`)).data
+        await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postID}`)
+        return postID
     }
 );
 
@@ -30,7 +31,17 @@ export const DeletePost = createAsyncThunk(
 // method for updating one post 
 export const UpdatePost = createAsyncThunk(
     "posts/updatePost",
-    async(postID, post) => {
-        return await (await axios.get(`https://jsonplaceholder.typicode.com/posts/${postID}`, post)).data
+    async(postID, state) => {
+        console.log(state)
+        return await (await axios.put(`https://jsonplaceholder.typicode.com/posts/${postID}`, state)).data
+    }
+);
+
+
+// method for adding new post 
+export const AddPost = createAsyncThunk(
+    "posts/addPost",
+    async(post) => {
+        return await (await axios.post(`https://jsonplaceholder.typicode.com/posts`, post)).data
     }
 );

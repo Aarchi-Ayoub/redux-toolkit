@@ -1,52 +1,32 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { GetPost, UpdatePost } from "../../services/PostsServices";
+import React, { Fragment, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AddPost } from "../../services/PostsServices";
+import { useHistory } from "react-router-dom";
 
-const GetOne = ({ match }) => {
+const Create = () => {
   // To use our actions
   const dispatch = useDispatch();
 
-  // Read from the global state
-  const { post } = useSelector((state) => state.post);
-
-  // Get the id from the query
-  const postID = match.params.postID;
-
   // tate for handeling the changes
   const [state, setstate] = useState({});
-
-  // Geting the post of this id in mounting the page
-  useEffect(() => {
-    dispatch(GetPost(postID));
-    setstate(post);
-  }, []);
-
-  // Set the post into the state
-  useEffect(() => {
-    setstate(post);
-  }, [post]);
 
   // Handel changes in the inputs
   const handelChanges = (e) => {
     setstate({ ...state, [e.target.id]: e.target.value });
   };
 
+  // For a redirect evenet
+  const history = useHistory();
+
   // methode responsable of the changing
-  const update = (e) => {
+  const create = (e) => {
     e.preventDefault();
-    console.log(state);
-    dispatch(UpdatePost(postID, state));
+    dispatch(AddPost(state));
+    history.push("/posts");
   };
-  return state ? (
+  return (
     <Fragment>
       <div className="container mt-3">
-        <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">{state.title}</h5>
-            <p className="card-text">{state.body}</p>
-          </div>
-        </div>
-
         <div className="mt-3">
           <label htmlFor="title" className="form-label">
             Title :
@@ -72,12 +52,12 @@ const GetOne = ({ match }) => {
             onChange={(e) => handelChanges(e)}
           ></textarea>
         </div>
-        <button className="btn btn-secondary btn-lg" onClick={(e) => update(e)}>
-          Updated
+        <button className="btn btn-secondary btn-lg" onClick={(e) => create(e)}>
+          Create
         </button>
       </div>
     </Fragment>
-  ) : null;
+  );
 };
 
-export default GetOne;
+export default Create;
